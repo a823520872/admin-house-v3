@@ -1,46 +1,45 @@
 <template>
     <div class="login">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <v-card :title="title">
+        <v-card class="login-form" :title="title">
             <form @submit.prevent="handleSubmit">
-                <div class="form-item">
-                    <label>用户名</label>
-                    <input type="text" v-model="form.account">
+                <div class="form-group mb-4 d-flex align-items-center">
+                    <label class="form-label text-right pr-2 mr-1 col-form-label">用户名</label>
+                    <div class="flex-fill">
+                        <input class="form-control" type="text" v-model="form.account">
+                    </div>
                 </div>
-                <div class="form-item">
-                    <label>用户名</label>
-                    <input type="password" v-model="form.password">
+                <div class="form-group mb-4 d-flex">
+                    <label class="form-label text-right pr-2 mr-1 col-form-label">密码</label>
+                    <div class="flex-fill">
+                        <input class="form-control" type="password" v-model="form.password">
+                    </div>
                 </div>
-                <div class="form-item">
-                    <button type="submit">登录</button>
-                </div>
-                <div class="form-item">
-                    <button @click="setLoading(!loading)">loading</button>
+                <div class="form-group d-flex">
+                    <label class="form-label text-right pr-2 mr-1 col-form-label"></label>
+                    <div class="flex-fill">
+                        <button class="btn btn-primary" type="submit">登录</button>
+                    </div>
                 </div>
             </form>
         </v-card>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <v-loading></v-loading>
     </div>
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import Ajax from '../utils/fetch.js'
 import store from '../store.js'
 import VCard from '../components/Card.vue'
+import VLoading from '../components/Loading.vue'
 export default {
     components: {
         VCard,
+        VLoading,
     },
     setup() {
-        const { loading, setUserInfo, setLoading } = store
+        const { loading, setUserInfo } = store
 
         const router = useRouter()
 
@@ -56,8 +55,8 @@ export default {
                 Ajax('/api/admin/User/login', { ...form }, {
                     method: 'post',
                     loading: true,
-                }).then(json => {
-                    let { userinfo, userinfo: { token } } = json.data || {}
+                }).then(res => {
+                    let { userinfo, userinfo: { token } } = res.data || {}
                     setUserInfo(userinfo)
                     sessionStorage.setItem('tk', token)
                     router.push('/')
@@ -67,30 +66,33 @@ export default {
             }
         }
 
-        const editTitle = e => title.value = e || '213'
-
-        onMounted(() => {
-            console.log(loading);
-        })
-
         return {
             title,
             loading,
             form,
             handleSubmit,
-            editTitle,
-            setLoading,
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 .login {
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-rows: 1fr 288px 1fr;
     grid-template-columns: 1fr 400px 1fr;
+    grid-template-rows: 1fr 288px 288px 1fr;
+}
+.login-form {
+    /* grid-column: 2 / 3;
+    grid-row: 2 / 3; */
+    grid-area: 2 / 2 / 3 / 3;
+}
+.form-label {
+    width: 68px;
+}
+.login :deep .card-header {
+    text-align: center;
 }
 </style>

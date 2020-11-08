@@ -8,6 +8,32 @@ const router = createRouter({
         {
             path: '/',
             component: Home,
+            children: [
+                {
+                    path: 'landlord',
+                    component: () => import(/* webpackChunkName: "landlord.list" */ './views/landlord/List.vue'),
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/landlord'
+                    }
+                },
+                {
+                    path: 'landlord/add',
+                    component: () => import(/* webpackChunkName: "landlord.detail" */ './views/landlord/Detail.vue'),
+                    meta: {
+                        _title: '添加房东',
+                        _menu: '/landlord'
+                    }
+                },
+                {
+                    path: 'landlord/:id',
+                    component: () => import(/* webpackChunkName: "landlord.detail" */ './views/landlord/Detail.vue'),
+                    meta: {
+                        _title: '编辑房东',
+                        _menu: '/landlord'
+                    }
+                }
+            ]
         },
         {
             path: '/login',

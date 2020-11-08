@@ -27,14 +27,13 @@ function Ajax(url, params, config = {}) {
     if (token) {
         cfg.headers.token = token
     }
+    
     return new Promise((resolve, reject) => {
         const { setLoading } = store
         config.loading && setLoading(true)
         fetch(url, cfg).then(res => res.json()).then(json => {
             resolve(json)
-            setTimeout(() => {
-                config.loading && setLoading(false)
-            }, 4000);
+            config.loading && setLoading(false)
         }, e => {
             reject(e)
             config.loading && setLoading(false)

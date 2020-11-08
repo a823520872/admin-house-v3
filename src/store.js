@@ -7,7 +7,6 @@ function createStore() {
     })
 
     const setLoading = loading => {
-        console.log('loading :>> ', loading);
         state.loading = loading
     }
     
