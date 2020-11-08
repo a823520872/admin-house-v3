@@ -1,8 +1,6 @@
 <template>
     <div class="card">
-        <!-- <template v-slot:header> -->
-        <div class="card-header" v-if="header1">{{header1}}</div>
-        <!-- </template> -->
+        <div class="card-header" v-if="title">{{title}}</div>
         <div class="card-body">
             <slot></slot>
         </div>
@@ -10,18 +8,9 @@
 </template>
 
 <script>
-import { toRefs } from 'vue'
 export default {
-    setup(props) {
-        const { header1 } = toRefs(props)
-        console.log(header1);
-        return {
-            header1,
-        }
-    }
+    props: {
+        title: String,
+    },
 }
 </script>
-
-<style>
-
-</style>

@@ -16,9 +16,17 @@ const router = createRouter({
     ]
 })
 
-// router.beforeEach((to, from, next) => {
-//     return true
-// })
+router.beforeEach((to) => {
+    if (to.path !== '/login') {
+        const token = sessionStorage.getItem('tk')
+        if (token) {
+            return true
+        } else {
+            return { path: '/login' }
+        }
+    }
+    return true
+})
 
 
 export default router
