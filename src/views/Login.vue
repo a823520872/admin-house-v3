@@ -1,26 +1,17 @@
 <template>
     <div class="login">
         <v-card class="login-form" :title="title">
-            <form @submit.prevent="handleSubmit">
-                <div class="form-group mb-4 d-flex align-items-center">
-                    <label class="form-label text-right pr-2 mr-1 col-form-label">用户名</label>
-                    <div class="flex-fill">
-                        <input class="form-control" type="text" v-model="form.account">
-                    </div>
-                </div>
-                <div class="form-group mb-4 d-flex">
-                    <label class="form-label text-right pr-2 mr-1 col-form-label">密码</label>
-                    <div class="flex-fill">
-                        <input class="form-control" type="password" v-model="form.password">
-                    </div>
-                </div>
-                <div class="form-group d-flex">
-                    <label class="form-label text-right pr-2 mr-1 col-form-label"></label>
-                    <div class="flex-fill">
-                        <button class="btn btn-primary" type="submit">登录</button>
-                    </div>
-                </div>
-            </form>
+            <v-form @submit.native.prevent="handleSubmit" label-width="68px" label-position="right">
+                <v-form-item label="用户名">
+                    <input class="form-control" type="text" v-model="form.account">
+                </v-form-item>
+                <v-form-item label="密码">
+                    <input class="form-control" type="password" v-model="form.password">
+                </v-form-item>
+                <v-form-item>
+                    <button class="btn btn-primary" type="submit">登录</button>
+                </v-form-item>
+            </v-form>
         </v-card>
         <v-loading></v-loading>
     </div>
@@ -33,9 +24,13 @@ import Ajax from '../utils/fetch.js'
 import store from '../store.js'
 import VCard from '../components/Card.vue'
 import VLoading from '../components/Loading.vue'
+import VForm from '../components/Form'
+import VFormItem from '../components/FormItem'
 export default {
     components: {
         VCard,
+        VForm,
+        VFormItem,
         VLoading,
     },
     setup() {
@@ -76,7 +71,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .login {
     display: grid;
     width: 100vw;
@@ -88,9 +83,6 @@ export default {
     /* grid-column: 2 / 3;
     grid-row: 2 / 3; */
     grid-area: 2 / 2 / 3 / 3;
-}
-.form-label {
-    width: 68px;
 }
 .login :deep .card-header {
     text-align: center;
