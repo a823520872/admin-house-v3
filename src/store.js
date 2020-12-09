@@ -4,6 +4,7 @@ function createStore() {
     let state = reactive({
         loading: false,
         userinfo: null,
+        menu: '/',
     })
 
     const setLoading = loading => {
@@ -14,10 +15,15 @@ function createStore() {
         state.userinfo = userinfo
     }
 
+    const setMenu = menu => {
+        state.menu = menu
+    }
+
     return {
         ...toRefs(state),
         setLoading,
         setUserInfo,
+        setMenu,
     }
 }
 

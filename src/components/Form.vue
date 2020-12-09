@@ -12,7 +12,8 @@ export default {
         labelPosition: { type: String, default: 'left', validator: value => ['left', 'right'].includes(value) },
     },
     setup(props) {
-        const { labelWidth, labelPosition } = props
+        const { labelWidth, labelPosition } = toRefs(props)
+        
         provide('label-width', labelWidth)
         provide('label-position', labelPosition)
 

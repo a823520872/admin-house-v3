@@ -6,7 +6,7 @@
         <thead>
             <th></th>
         </thead>
-        <tbody>
+        <tbody v-for="(li, i) in data" :key="i">
             <td></td>
         </tbody>
     </table>
@@ -16,11 +16,11 @@
 export default {
     props: {
         data: Array,
-        ['v-loading']: Boolean,
+        // ['v-loading']: Boolean,
     },
 }
 </script>
 
 <style>
-
+.table th, td { vertical-align: middle; }
 </style>

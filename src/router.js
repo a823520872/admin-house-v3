@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import store from './store.js'
 import Home from './views/components/Home.vue'
 import Login from './views/Login.vue'
 
@@ -9,6 +10,10 @@ const router = createRouter({
             path: '/',
             component: Home,
             children: [
+                // {
+                //     path: '/',
+                //     component: () => import('./views/grid/Grid.vue'),
+                // },
                 {
                     path: 'landlord',
                     component: () => import(/* webpackChunkName: "landlord.list" */ './views/landlord/List.vue'),
@@ -46,6 +51,7 @@ router.beforeEach((to) => {
     if (to.path !== '/login') {
         const token = sessionStorage.getItem('tk')
         if (token) {
+            store.setMenu(`${to.meta._menu}`)
             return true
         } else {
             return { path: '/login' }

@@ -1,18 +1,18 @@
 <template>
     <div class="login">
-        <v-card class="login-form" :title="title">
-            <v-form @submit.native.prevent="handleSubmit" label-width="68px" label-position="right">
-                <v-form-item label="用户名">
-                    <input class="form-control" type="text" v-model="form.account">
-                </v-form-item>
-                <v-form-item label="密码">
-                    <input class="form-control" type="password" v-model="form.password">
-                </v-form-item>
-                <v-form-item>
-                    <button class="btn btn-primary" type="submit">登录</button>
-                </v-form-item>
-            </v-form>
-        </v-card>
+        <el-card class="login-form" :header="title">
+            <el-form ref="loginForm" :model="form" :rules="rules" label-width="80px" @keydown.enter="handleSubmit">
+                <el-form-item label="用户名" prop="account">
+                    <el-input v-model="form.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="form.password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" class="btn_login" @click="handleSubmit">登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
         <v-loading></v-loading>
     </div>
 </template>
@@ -22,50 +22,59 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import Ajax from '../utils/fetch.js'
 import store from '../store.js'
-import VCard from '../components/Card.vue'
 import VLoading from '../components/Loading.vue'
-import VForm from '../components/Form'
-import VFormItem from '../components/FormItem'
 export default {
     components: {
-        VCard,
-        VForm,
-        VFormItem,
         VLoading,
     },
     setup() {
-        const { loading, setUserInfo } = store
+        const { 
+            loading, 
+            setUserInfo, 
+        } = store
 
         const router = useRouter()
 
         const title = ref('村里租房管理系统')
+        const loginForm = ref(null)
+        const rules = ref({
+            account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+            password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        })
 
         const form = reactive({
             account: '',
             password: '',
         })
 
+        const handleLogin = () => {
+            Ajax('/api/admin/User/login', { ...form }, {
+                method: 'post',
+                loading: true,
+            }).then(res => {
+                let { userinfo, userinfo: { token } } = res.data || {}
+                setUserInfo(userinfo)
+                sessionStorage.setItem('tk', token)
+                router.push('/')
+            }, e => {
+                console.log(e);
+            })
+        }
+
         const handleSubmit = () => {
-            if (form.account && form.password) {
-                Ajax('/api/admin/User/login', { ...form }, {
-                    method: 'post',
-                    loading: true,
-                }).then(res => {
-                    let { userinfo, userinfo: { token } } = res.data || {}
-                    setUserInfo(userinfo)
-                    sessionStorage.setItem('tk', token)
-                    router.push('/')
-                }, e => {
-                    console.log(e);
-                })
-            }
+            loginForm.value.validate(valid => {
+                if (!valid) return
+                handleLogin()
+            })
         }
 
         return {
             title,
             loading,
             form,
+            rules,
             handleSubmit,
+            loginForm,
         }
     }
 }
@@ -73,18 +82,20 @@ export default {
 
 <style>
 .login {
-    display: grid;
+    display: flex;
     width: 100vw;
     height: 100vh;
-    grid-template-columns: 1fr 400px 1fr;
-    grid-template-rows: 1fr 288px 288px 1fr;
+    justify-content: center;
+    align-items: center;
 }
 .login-form {
-    /* grid-column: 2 / 3;
-    grid-row: 2 / 3; */
-    grid-area: 2 / 2 / 3 / 3;
+    width: 402px;
+    height: 288px;
+    transform: translateY(-50%);
 }
-.login :deep .card-header {
+.login .el-card__header {
     text-align: center;
+    font-size: 16px;
+    font-weight: 500;
 }
 </style>

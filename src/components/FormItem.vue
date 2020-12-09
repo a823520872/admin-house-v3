@@ -8,20 +8,24 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject, toRefs } from 'vue'
 export default {
     props: {
         label: { type: String, default: '' },
         labelWidth: { type: String, default: '' },
     },
     setup(props) {
-        const { labelWidth: labelWidth1 } = props
+        const { labelWidth: labelWidth1 } = toRefs(props)
+        // const { labelWidth: labelWidth1 } = props
         const labelWidth2 = inject('label-width')
         const labelPosition = inject('label-position')
         
         const labelWidth = labelWidth1 || labelWidth2
 
         const formStyle = `--labelWidth: ${labelWidth};`
+
+        // console.log('labelWidth1 :>> ', labelWidth1);
+        // console.log('labelWidth2 :>> ', labelWidth2);
 
         return {
             formStyle,

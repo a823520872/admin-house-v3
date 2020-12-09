@@ -13,7 +13,7 @@ function Ajax(url, params, config = {}) {
     }
     if (cfg.method === 'get') {
         let paramsStr = Object.keys(params).reduce((str, key) => {
-            str += `&${key}=${str}`
+            str += `&${key}=${params[key]}`
             return str
         }, '').replace('&', '?')
         url += paramsStr
@@ -32,8 +32,12 @@ function Ajax(url, params, config = {}) {
         const { setLoading } = store
         config.loading && setLoading(true)
         fetch(url, cfg).then(res => res.json()).then(json => {
-            resolve(json)
             config.loading && setLoading(false)
+            if (json.code === 1) {
+                resolve(json)
+            // } else {
+                
+            }
         }, e => {
             reject(e)
             config.loading && setLoading(false)
