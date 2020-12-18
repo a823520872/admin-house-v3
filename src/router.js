@@ -10,10 +10,6 @@ const router = createRouter({
             path: '/',
             component: Home,
             children: [
-                // {
-                //     path: '/',
-                //     component: () => import('./views/grid/Grid.vue'),
-                // },
                 {
                     path: 'landlord',
                     component: () => import(/* webpackChunkName: "landlord.list" */ './views/landlord/List.vue'),
@@ -37,6 +33,62 @@ const router = createRouter({
                         _title: '编辑房东',
                         _menu: '/landlord'
                     }
+                },
+                {
+                    path: 'house',
+                    component: () => import(/* webpackChunkName: "house.list" */ './views/house/List.vue'),
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/house'
+                    }
+                },
+                {
+                    path: 'house/add',
+                    component: () => import(/* webpackChunkName: "house.detail" */ './views/house/Item.vue'),
+                    meta: {
+                        _title: '添加房源',
+                        _menu: '/house'
+                    }
+                },
+                {
+                    path: 'house/:id',
+                    component: () => import(/* webpackChunkName: "house.detail" */ './views/house/Item.vue'),
+                    meta: {
+                        _title: '编辑房源',
+                        _menu: '/house'
+                    }
+                },
+                {
+                    path: 'address/flag',
+                    component: () => import(/* webpackChunkName: "flag" */ './views/address/flag.vue'),
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/address/flag'
+                    }
+                },
+                {
+                    path: 'address/street',
+                    component: () => import(/* webpackChunkName: "street" */ './views/address/street.vue'),
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/address/street'
+                    }
+                },
+                {
+                    path: 'address/metro',
+                    component: () => import(/* webpackChunkName: "metro" */ './views/address/metro.vue'),
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/address/metro'
+                    }
+                },
+                {
+                    path: 'statistics',
+                    meta: {
+                        keepAlive: true,
+                        _menu: '/statistics'
+                    },
+                    component: () => import(/* webpackChunkName: "statistics.list" */ './views/statistics/List.vue')
                 }
             ]
         },

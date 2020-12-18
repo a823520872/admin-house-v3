@@ -62,9 +62,10 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import store from '../../store.js'
 import Ajax from '../../utils/fetch.js'
+import useAddr from '../../utils/addr.js'
 import PageHeader from '../components/PageHeader.vue'
 import vLoading from '../../components/Loading.vue'
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 export default {
     components: {
@@ -75,6 +76,10 @@ export default {
         const { loading } = store
         const router = useRouter()
         const route = useRoute()
+
+        const goBack = () => router.go(-1)
+
+        const { addr, getAddr } = useAddr
 
         let id
 
@@ -114,6 +119,42 @@ export default {
 
         const selectedOptions = ref([])
         const timerange = ref([])
+        const pickerOptions = ref({
+                shortcuts: [
+                    {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const start = dayjs();
+                            const end = dayjs().add(1, 'months');
+                            picker.$emit('pick', [start, end]);
+                        }
+                    },
+                    {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const start = dayjs();
+                            const end = dayjs().add(3, 'months');
+                            picker.$emit('pick', [start, end]);
+                        }
+                    },
+                    {
+                        text: '最近半年',
+                        onClick(picker) {
+                            const start = dayjs();
+                            const end = dayjs().add(6, 'months');
+                            picker.$emit('pick', [start, end]);
+                        }
+                    },
+                    {
+                        text: '最近一年',
+                        onClick(picker) {
+                            const start = dayjs();
+                            const end = dayjs().add(1, 'years');
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }
+                ]
+            })
 
         const getData = () => {
             Ajax('/api/admin/landlord/getDetail', { id }, { loading: true }).then(res => {
@@ -131,15 +172,10 @@ export default {
         const handleChange = (e) => {
             let position_province_id = 1964
             let [position_city_id, postion_district_id, postion_street_id] = e
-            // form = { ...form, ...{ position_province_id, position_city_id, postion_district_id, postion_street_id } }
             form.position_province_id = position_province_id
             form.position_city_id = position_city_id
             form.postion_district_id = postion_district_id
             form.postion_street_id = postion_street_id
-        }
-
-        const goBack = () => {
-            router.go(-1)
         }
 
         const submitForm = () => {
@@ -155,7 +191,7 @@ export default {
                 id = route.params.id
                 getData()
             }
-            // getArea()
+            getAddr()
         })
     
         return {
@@ -163,8 +199,10 @@ export default {
             landlordForm,
             form,
             rules,
+            addr,
             timerange,
             selectedOptions,
+            pickerOptions,
             handleChange,
             goBack,
             submitForm,

@@ -22,6 +22,7 @@
                     expand-trigger="hover"
                     separator=" "
                     :options="addr"
+                    :props="{ expandTrigger: 'hover' }"
                     v-model="selectedOptions"
                     @change="handleChange"
                 ></el-cascader>
@@ -98,10 +99,17 @@ import { useRouter } from 'vue-router'
 import store from '../../store.js'
 import Ajax from '../../utils/fetch.js'
 import dayjs from 'dayjs'
+import useAddr from '../../utils/addr.js'
 
 export default {
     setup () {
         const { loading } = store
+        const router = useRouter()
+
+        const goPage = v => router.push(v)
+
+        const { addr, getAddr } = useAddr
+
         const params = reactive({
             name: '',
             postion_street_id: '',
@@ -118,10 +126,8 @@ export default {
         const list = ref([])
         const selectedOptions = ref([])
 
-        const router = useRouter()
-
         const handleAdd = () => {
-            router.push('/landlord/add')
+            goPage('/landlord/add')
         }
 
         const getData = () => {
@@ -152,17 +158,19 @@ export default {
         }
 
         const handleLink = item => {
-            router.push(`/landlord/${item.id}`)
+            goPage(`/landlord/${item.id}`)
         }
 
         onMounted(() => {
             getData()
+            getAddr()
         })
     
         return {
             loading,
             params,
             pageParams,
+            addr,
             list,
             handleAdd,
             selectedOptions,

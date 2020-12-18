@@ -30,9 +30,8 @@ import { useRouter } from 'vue-router'
 import store from '../../store.js'
 export default {
     setup() {
-        const { menu } = store
-
         const router = useRouter()
+        const { menu } = store
 
         const menuList = ref([
             {

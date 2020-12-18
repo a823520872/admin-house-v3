@@ -1,6 +1,9 @@
+import { useRouter } from 'vue-router'
 import store from '../store.js'
+import { ElMessageBox } from 'element-plus';
 
-function Ajax(url, params, config = {}) {
+function Ajax(url, params = {}, config = {}) {
+    const router = useRouter()
     let cfg = {
         ...{
             method: 'get',
@@ -35,12 +38,19 @@ function Ajax(url, params, config = {}) {
             config.loading && setLoading(false)
             if (json.code === 1) {
                 resolve(json)
-            // } else {
-                
+            } else if (json.code === 401) {
+                sessionStorage.clear();
+                router.replace('/login');
+            } else {
+                ElMessageBox(json.msg, '服务异常', 'warning');
+                reject({ msg: json.msg });
             }
         }, e => {
             reject(e)
             config.loading && setLoading(false)
+        }).catch((e) => {
+            reject({ msg: '网络异常' });
+            ElMessageBox(e.message, '网络异常', 'error');
         })
     })
 }

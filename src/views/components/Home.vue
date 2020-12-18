@@ -7,21 +7,20 @@
         <el-header class="el-row--flex is-justify-end">
             <el-button type="text" class="btn_logout" @click="handleLogout">退出登录</el-button>
         </el-header>
-        <!-- <div class="home-topbar d-flex justify-content-end align-items-center px-4">
-            <nav class="nav">
-                <a href="javascript:void(0);" class="nav-link" @click="handleLogout">退出登录</a>
-            </nav>
-        </div> -->
         <div class="home-body bg-light p-3">
             <div class="position-relative bg-white p-3">
-                <router-view></router-view>
+                <keep-alive v-if="keepAlive">
+                    <router-view></router-view>
+                </keep-alive>
+                <router-view v-else></router-view>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import VMenu from './Menu.vue'
 export default {
     components: {
@@ -29,14 +28,18 @@ export default {
     },
     setup() {
         const router = useRouter()
+        const route = useRoute()
+
         const handleLogout = () => {
             sessionStorage.removeItem('tk')
-
-            router.replace('/login')
+            router.push('/login')
         }
+
+        const keepAlive = computed(() => route.meta && route.meta.keepAlive)
 
         return {
             handleLogout,
+            keepAlive,
         }
     }
 }

@@ -9,14 +9,13 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 export default {
     setup() {
-        const router = useRouter()
         const route = useRoute()
 
         const title = computed(() => route.meta._title)
 
-        const goBack = () => {
-            router.go(-1)
-        }
+        const router = useRouter()
+
+        const goBack = () => router.go(-1)
 
         return {
             title,
