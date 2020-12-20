@@ -1,8 +1,6 @@
 <template>
-    <el-dialog :title="title" :visible="showModal" width="480px" @close="hideModal">
-        <div>
-            <img :src="qr" alt="" width="100%">
-        </div>
+    <el-dialog :title="title" v-model="showModal" width="480px" @close="hideModal">
+        <el-image :src="qr"></el-image>
         <template #footer>
             <div class="dialog-footer">
                 <el-button @click="hideModal">取 消</el-button>

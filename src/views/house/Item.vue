@@ -106,7 +106,6 @@ import store from '../../store.js'
 import useAddr from '../../utils/addr.js'
 import dayjs from 'dayjs';
 import PageHeader from '../components/PageHeader.vue'
-import vLoading from '../../components/Loading.vue'
 export default {
     setup() {
         const { 
@@ -134,7 +133,6 @@ export default {
     // },
     components: {
         PageHeader,
-        vLoading,
     },
     data() {
         return {

@@ -20,13 +20,9 @@
 <script>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import Ajax from '../utils/fetch.js'
+import request from '../api/index.js'
 import store from '../store.js'
-import VLoading from '../components/Loading.vue'
 export default {
-    components: {
-        VLoading,
-    },
     setup() {
         const { 
             loading, 
@@ -48,10 +44,7 @@ export default {
         })
 
         const handleLogin = () => {
-            Ajax('/api/admin/User/login', { ...form }, {
-                method: 'post',
-                loading: true,
-            }).then(res => {
+            request.user.login({ ...form }).then(res => {
                 let { userinfo, userinfo: { token } } = res.data || {}
                 setUserInfo(userinfo)
                 sessionStorage.setItem('tk', token)

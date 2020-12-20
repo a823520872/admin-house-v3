@@ -83,7 +83,7 @@
                 ></el-pagination>
             </div>
         </div>
-        <el-dialog :title="form && form.id ? '编辑村' : '添加村'" v-model:visible="dialogAddStreetVisible" width="320px">
+        <el-dialog :title="form && form.id ? '编辑村' : '添加村'" v-model="dialogAddStreetVisible" width="320px">
             <el-form :model="form" :rules="ruleForm" ref="form" label-width="80px">
                 <el-form-item v-if="addr" label="所属区域" prop="pid_area_district">
                     <el-cascader
@@ -106,6 +106,7 @@
                 </div>
             </template>
         </el-dialog>
+        <v-loading></v-loading>
     </div>
 </template>
 

@@ -61,16 +61,15 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import store from '../../store.js'
-import Ajax from '../../utils/fetch.js'
+import request from '../../api/index.js'
 import useAddr from '../../utils/addr.js'
 import PageHeader from '../components/PageHeader.vue'
-import vLoading from '../../components/Loading.vue'
 import dayjs from 'dayjs'
+import { ElMessageBox } from 'element-plus';
 
 export default {
     components: {
         PageHeader,
-        vLoading,
     },
     setup () {
         const { loading } = store
@@ -157,7 +156,7 @@ export default {
             })
 
         const getData = () => {
-            Ajax('/api/admin/landlord/getDetail', { id }, { loading: true }).then(res => {
+            request.landlord.detail({ id }).then(res => {
                     let { indate_begin, indate_end, position_city_id, postion_district_id, postion_street_id } = res.data || {};
                     Object.keys(form).map(key => {
                         form[key] = res.data[key];
@@ -181,12 +180,16 @@ export default {
         const submitForm = () => {
             landlordForm.value.validate(valid => {
                 if (!valid) return
-                goBack()
+                let url = id ? 'edit' : 'add';
+                const data = id ? { ...form, id } : { ...form }
+                request.landlord[url](data).then(() => {
+                    ElMessageBox({ showClose: true, message: '操作成功', type: 'success', duration: 5000 });
+                    goBack()
+                });
             })
         }
 
         onMounted(() => {
-            console.log('route :>> ', route);
             if (route.params.id) {
                 id = route.params.id
                 getData()

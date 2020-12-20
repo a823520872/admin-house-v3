@@ -109,7 +109,7 @@
             </div>
         </div>
         <dialog-qr :qr="qr" title="海报" @close="qr = false"></dialog-qr>
-        <el-dialog title="租房状态" v-model:visible="dialogRentVisible" v-if="form.ids">
+        <el-dialog title="租房状态" v-model="dialogRentVisible" v-if="form.ids">
             <el-form :model="form" :rules="ruleForm" ref="form" label-width="80px">
                 <el-radio-group v-model="form.rent_status" prop="rent_status">
                     <el-radio label="未租">未租</el-radio>

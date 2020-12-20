@@ -14,7 +14,9 @@ function Ajax(url, params = {}, config = {}) {
         },
         ...config
     }
-    if (cfg.method === 'get') {
+    if (cfg.upload) {
+        cfg.body = params
+    } else if (cfg.method === 'get') {
         let paramsStr = Object.keys(params).reduce((str, key) => {
             str += `&${key}=${params[key]}`
             return str
@@ -42,8 +44,8 @@ function Ajax(url, params = {}, config = {}) {
                 sessionStorage.clear();
                 router.replace('/login');
             } else {
-                ElMessageBox(json.msg, '服务异常', 'warning');
-                reject({ msg: json.msg });
+                ElMessageBox(json.msg || json.data, '服务异常', 'warning');
+                reject({ msg: json.msg || json.data });
             }
         }, e => {
             reject(e)

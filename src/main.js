@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router.js'
 import request from './api/index.js'
 import './styles/app.css'
+import VLoading from './components/Loading.vue'
 
 let app = createApp(App)
 
@@ -12,5 +13,6 @@ app.config.devtools = true
 app.use(ElementPlus)
 app.use(router)
 app.config.globalProperties.$request = request;
+app.component(VLoading)
 
 app.mount('#app')
